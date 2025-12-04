@@ -135,7 +135,7 @@ public class MusicStoreTest {
         store.addMusic(album1);
         store.addMusic(album2);
 
-        SearchStrategy strategy = new SearchByTitleStrategy();
+        SearchStrategy strategy = SearchStrategyFactory.get(SearchType.TITLE);
         List<Album> result = store.searchMusic(strategy, "Ten");
         assertEquals(1, result.size(), "Only the album 'Ten' should be returned.");
         assertEquals("Ten", result.getFirst().getTitle());
@@ -150,7 +150,7 @@ public class MusicStoreTest {
         store.addMusic(album1);
         store.addMusic(album2);
 
-        SearchStrategy strategy = new SearchByArtistStrategy();
+        SearchStrategy strategy = SearchStrategyFactory.get(SearchType.ARTIST);
         List<Album> result = store.searchMusic(strategy, "Red Hot Chili Peppers");
 
         assertEquals(1, result.size());
@@ -166,7 +166,7 @@ public class MusicStoreTest {
         store.addMusic(album1);
         store.addMusic(album2);
 
-        SearchStrategy strategy = new SearchByGenreStrategy();
+        SearchStrategy strategy = SearchStrategyFactory.get(SearchType.GENRE);
         List<Album> result = store.searchMusic(strategy, "Grunge");
 
         assertEquals(1, result.size());
@@ -183,7 +183,7 @@ public class MusicStoreTest {
         store.addMusic(album1);
         store.addMusic(album2);
 
-        SearchStrategy strategy = new SearchByTypeStrategy();
+        SearchStrategy strategy = SearchStrategyFactory.get(SearchType.TYPE);
         List<Album> result = store.searchMusic(strategy, "vinyl");
 
         assertEquals(1, result.size());
