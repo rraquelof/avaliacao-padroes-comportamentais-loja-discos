@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -123,6 +124,71 @@ public class MusicStoreTest {
         assertEquals(3, album.getStock(), "Stock should decrease by 1 after successful purchase");
         assertEquals(expectedDiscount, store.calculateDiscount(album, customer.getType()), 0.01, "Discount should match the calculated discount");
         assertTrue(customer.getPurchases().contains(album), "Album should be added to customer's purchases");
+    }
+
+    @Test
+    @DisplayName("Should search albums by title")
+    void testSearchByTitle(){
+        Album album1 = new Album("Ten", "Pearl Jam", MediaType.CD, 50.00,LocalDate.of(1991, Month.AUGUST, 27),AgeRestriction.GENERAL, "Grunge",5);
+        Album album2 = new Album("Stadium Arcadium", "Red Hot Chili Peppers", MediaType.VINYL, 120.00, LocalDate.of(2006, Month.MAY, 9), AgeRestriction.GENERAL, "Rock", 7);
+
+        store.addMusic(album1);
+        store.addMusic(album2);
+
+        SearchStrategy strategy = new SearchByTitleStrategy();
+        List<Album> result = store.searchMusic(strategy, "Ten");
+        assertEquals(1, result.size(), "Only the album 'Ten' should be returned.");
+        assertEquals("Ten", result.getFirst().getTitle());
+    }
+
+    @Test
+    @DisplayName("Should search albums by artist")
+    void testSearchByArtist(){
+        Album album1 = new Album("Ten", "Pearl Jam", MediaType.CD, 50.00,LocalDate.of(1991, Month.AUGUST, 27),AgeRestriction.GENERAL, "Grunge",5);
+        Album album2 = new Album("Stadium Arcadium", "Red Hot Chili Peppers", MediaType.VINYL, 120.00, LocalDate.of(2006, Month.MAY, 9), AgeRestriction.GENERAL, "Rock", 7);
+
+        store.addMusic(album1);
+        store.addMusic(album2);
+
+        SearchStrategy strategy = new SearchByArtistStrategy();
+        List<Album> result = store.searchMusic(strategy, "Red Hot Chili Peppers");
+
+        assertEquals(1, result.size());
+        assertEquals("Red Hot Chili Peppers", result.getFirst().getArtist());
+    }
+
+    @Test
+    @DisplayName("Should search albums by genre")
+    void testSearchByGenre(){
+        Album album1 = new Album("Ten", "Pearl Jam", MediaType.CD, 50.00,LocalDate.of(1991, Month.AUGUST, 27),AgeRestriction.GENERAL, "Grunge",5);
+        Album album2 = new Album("Stadium Arcadium", "Red Hot Chili Peppers", MediaType.VINYL, 120.00, LocalDate.of(2006, Month.MAY, 9), AgeRestriction.GENERAL, "Rock", 7);
+
+        store.addMusic(album1);
+        store.addMusic(album2);
+
+        SearchStrategy strategy = new SearchByGenreStrategy();
+        List<Album> result = store.searchMusic(strategy, "Grunge");
+
+        assertEquals(1, result.size());
+        assertEquals("Grunge", result.getFirst().getGenre());
+        assertTrue(result.contains(album1));
+    }
+
+    @Test
+    @DisplayName("Should search albums by media type")
+    void testSearhByType(){
+        Album album1 = new Album("Ten", "Pearl Jam", MediaType.CD, 50.00,LocalDate.of(1991, Month.AUGUST, 27),AgeRestriction.GENERAL, "Grunge",5);
+        Album album2 = new Album("Stadium Arcadium", "Red Hot Chili Peppers", MediaType.VINYL, 120.00, LocalDate.of(2006, Month.MAY, 9), AgeRestriction.GENERAL, "Rock", 7);
+
+        store.addMusic(album1);
+        store.addMusic(album2);
+
+        SearchStrategy strategy = new SearchByTypeStrategy();
+        List<Album> result = store.searchMusic(strategy, "vinyl");
+
+        assertEquals(1, result.size());
+        assertEquals(MediaType.VINYL, result.getFirst().getType());
+        assertTrue(result.contains(album2));
     }
 
 }

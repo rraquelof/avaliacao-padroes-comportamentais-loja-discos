@@ -24,36 +24,8 @@ public class MusicStore {
         customers.add(customer);
     }
 
-    public List<Album> searchMusic(SearchType searchType, String searchTerm) {
-        List<Album> results = new ArrayList<>();
-
-        if (searchType.equals(SearchType.TITLE)) {
-            for (Album album : inventory) {
-                if (album.getTitle().toLowerCase().contains(searchTerm.toLowerCase())) {
-                    results.add(album);
-                }
-            }
-        } else if (searchType.equals(SearchType.ARTIST)) {
-            for (Album album : inventory) {
-                if (album.getArtist().toLowerCase().contains(searchTerm.toLowerCase())) {
-                    results.add(album);
-                }
-            }
-        } else if (searchType.equals(SearchType.GENRE)) {
-            for (Album album : inventory) {
-                if (album.getGenre().toLowerCase().contains(searchTerm.toLowerCase())) {
-                    results.add(album);
-                }
-            }
-        } else if (searchType.equals(SearchType.TYPE)) {
-            for (Album album : inventory) {
-                if (album.getType().name().equalsIgnoreCase(searchTerm)) {
-                    results.add(album);
-                }
-            }
-        }
-
-        return results;
+    public List<Album> searchMusic(SearchStrategy strategy, String searchTerm) {
+        return strategy.search(inventory, searchTerm);
     }
 
     public double calculateDiscount(Album album, CustomerType customerType) {
