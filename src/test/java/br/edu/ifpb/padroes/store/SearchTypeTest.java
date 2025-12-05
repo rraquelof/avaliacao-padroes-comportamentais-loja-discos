@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SearchTypeTest {
@@ -32,4 +33,20 @@ public class SearchTypeTest {
         List<Album> result = store.searchMusic(strategy, "AlbumThatDoesNotExist");
         assertTrue(result.isEmpty(), "Search should return empty list when no titles match");
     }
+
+    @Test
+    @DisplayName("Should search albums ignoring case sensitivity")
+    void testSearchCaseInsensitive() {
+        Album album1 = new Album("Man's Best Friend","Sabrina Carpenter", MediaType.CD,
+                50.00, LocalDate.of(2024, Month.JULY, 1), AgeRestriction.GENERAL,
+                "Pop", 5);
+        store.addMusic(album1);
+        SearchStrategy strategy = SearchStrategyFactory.get(SearchType.TITLE);
+        List<Album> result = store.searchMusic(strategy, "MAn's Best Friend");
+
+        assertEquals(1, result.size());
+        assertEquals("Man's Best Friend", result.getFirst().getTitle());
+    }
+
+    
 }
