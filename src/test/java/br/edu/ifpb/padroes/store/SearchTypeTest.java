@@ -47,6 +47,25 @@ public class SearchTypeTest {
         assertEquals(1, result.size());
         assertEquals("Man's Best Friend", result.getFirst().getTitle());
     }
+    @Test
+    @DisplayName("Should return multiple albums when more than one matches the search")
+    void testSearchMultipleMatches() {
+        Album album1 = new Album("Man's Best Friend","Sabrina Carpenter", MediaType.CD,
+                50.00, LocalDate.of(2024, Month.JULY, 1), AgeRestriction.GENERAL,
+                "Pop", 5);
+        Album album2 = new Album("Short n' Sweet","Sabrina Carpenter", MediaType.CD,
+                50.00, LocalDate.of(2024, Month.JULY, 1), AgeRestriction.GENERAL,
+                "Pop", 5);
 
+        store.addMusic(album1);
+        store.addMusic(album2);
+
+        SearchStrategy strategy = SearchStrategyFactory.get(SearchType.ARTIST);
+        List<Album> result = store.searchMusic(strategy, "Sabrina Carpenter");
+
+        assertEquals(2, result.size());
+        assertTrue(result.contains(album1));
+        assertTrue(result.contains(album2));
+    }
     
 }
