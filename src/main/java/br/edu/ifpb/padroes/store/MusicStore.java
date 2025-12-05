@@ -17,7 +17,6 @@ public class MusicStore {
 
     public void addMusic(Album album) {
         inventory.add(album);
-        System.out.println("Added: " + album.getTitle());
     }
 
     public void addCustomer(Customer customer) {
@@ -31,21 +30,10 @@ public class MusicStore {
     public double calculateDiscount(Album album, CustomerType customerType) {
         double discount = 0;
 
-        if (customerType.equals(CustomerType.VIP)) {
-            discount = album.getPrice() * 0.20;
-        } else if (customerType.equals(CustomerType.PREMIUM)) {
-            discount = album.getPrice() * 0.15;
-        } else if (customerType.equals(CustomerType.REGULAR)) {
-            discount = album.getPrice() * 0.05;
-        }
+        List<DiscountStrategy> strategies = DiscountStrategyFactory.getAll(customerType);
 
-        // Additional discounts
-        if (album.getType().equals(MediaType.VINYL) && album.getReleaseDate().getYear() < 1980) {
-            discount += album.getPrice() * 0.10;
-        }
-
-        if (album.getGenre().equalsIgnoreCase("Pop Punk") && customerType.equals(CustomerType.VIP)) {
-            discount += album.getPrice() * 0.05;
+        for(DiscountStrategy strategy : strategies){
+            discount += strategy.calculate(album, customerType);
         }
 
         return discount;

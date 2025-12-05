@@ -80,4 +80,69 @@ public class SearchTypeTest {
         assertEquals(1, result.size());
         assertEquals("pop country", result.getFirst().getGenre());
     }
+
+    @Test
+    @DisplayName("Should search albums by title")
+    void testSearchByTitle(){
+        Album album1 = new Album("Ten", "Pearl Jam", MediaType.CD, 50.00,LocalDate.of(1991, Month.AUGUST, 27),AgeRestriction.GENERAL, "Grunge",5);
+        Album album2 = new Album("Stadium Arcadium", "Red Hot Chili Peppers", MediaType.VINYL, 120.00, LocalDate.of(2006, Month.MAY, 9), AgeRestriction.GENERAL, "Rock", 7);
+
+        store.addMusic(album1);
+        store.addMusic(album2);
+
+        SearchStrategy strategy = SearchStrategyFactory.get(SearchType.TITLE);
+        List<Album> result = store.searchMusic(strategy, "Ten");
+        assertEquals(1, result.size(), "Only the album 'Ten' should be returned.");
+        assertEquals("Ten", result.getFirst().getTitle());
+    }
+
+    @Test
+    @DisplayName("Should search albums by artist")
+    void testSearchByArtist(){
+        Album album1 = new Album("Ten", "Pearl Jam", MediaType.CD, 50.00,LocalDate.of(1991, Month.AUGUST, 27),AgeRestriction.GENERAL, "Grunge",5);
+        Album album2 = new Album("Stadium Arcadium", "Red Hot Chili Peppers", MediaType.VINYL, 120.00, LocalDate.of(2006, Month.MAY, 9), AgeRestriction.GENERAL, "Rock", 7);
+
+        store.addMusic(album1);
+        store.addMusic(album2);
+
+        SearchStrategy strategy = SearchStrategyFactory.get(SearchType.ARTIST);
+        List<Album> result = store.searchMusic(strategy, "Red Hot Chili Peppers");
+
+        assertEquals(1, result.size());
+        assertEquals("Red Hot Chili Peppers", result.getFirst().getArtist());
+    }
+
+    @Test
+    @DisplayName("Should search albums by genre")
+    void testSearchByGenre(){
+        Album album1 = new Album("Ten", "Pearl Jam", MediaType.CD, 50.00,LocalDate.of(1991, Month.AUGUST, 27),AgeRestriction.GENERAL, "Grunge",5);
+        Album album2 = new Album("Stadium Arcadium", "Red Hot Chili Peppers", MediaType.VINYL, 120.00, LocalDate.of(2006, Month.MAY, 9), AgeRestriction.GENERAL, "Rock", 7);
+
+        store.addMusic(album1);
+        store.addMusic(album2);
+
+        SearchStrategy strategy = SearchStrategyFactory.get(SearchType.GENRE);
+        List<Album> result = store.searchMusic(strategy, "Grunge");
+
+        assertEquals(1, result.size());
+        assertEquals("Grunge", result.getFirst().getGenre());
+        assertTrue(result.contains(album1));
+    }
+
+    @Test
+    @DisplayName("Should search albums by media type")
+    void testSearhByType(){
+        Album album1 = new Album("Ten", "Pearl Jam", MediaType.CD, 50.00,LocalDate.of(1991, Month.AUGUST, 27),AgeRestriction.GENERAL, "Grunge",5);
+        Album album2 = new Album("Stadium Arcadium", "Red Hot Chili Peppers", MediaType.VINYL, 120.00, LocalDate.of(2006, Month.MAY, 9), AgeRestriction.GENERAL, "Rock", 7);
+
+        store.addMusic(album1);
+        store.addMusic(album2);
+
+        SearchStrategy strategy = SearchStrategyFactory.get(SearchType.TYPE);
+        List<Album> result = store.searchMusic(strategy, "vinyl");
+
+        assertEquals(1, result.size());
+        assertEquals(MediaType.VINYL, result.getFirst().getType());
+        assertTrue(result.contains(album2));
+    }
 }
