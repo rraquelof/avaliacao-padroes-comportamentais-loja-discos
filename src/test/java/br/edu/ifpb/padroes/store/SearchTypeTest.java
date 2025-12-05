@@ -67,5 +67,17 @@ public class SearchTypeTest {
         assertTrue(result.contains(album1));
         assertTrue(result.contains(album2));
     }
-    
+    @Test
+    @DisplayName("Should search albums by partial genre")
+    void testSearchByPartialGenre() {
+        Album album1 = new Album("Man's Best Friend","Sabrina Carpenter", MediaType.CD,
+                50.00, LocalDate.of(2024, Month.JULY, 1), AgeRestriction.GENERAL,
+                "pop country", 5);
+        store.addMusic(album1);
+        SearchStrategy strategy = SearchStrategyFactory.get(SearchType.GENRE);
+        List<Album> result = store.searchMusic(strategy, "country");
+
+        assertEquals(1, result.size());
+        assertEquals("pop country", result.getFirst().getGenre());
+    }
 }
