@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="avaliacao-padroes-comportamentais-loja-discos" />
         <module name="atv-padroes-comportamentais-2025-2" />
       </profile>
     </annotationProcessing>
