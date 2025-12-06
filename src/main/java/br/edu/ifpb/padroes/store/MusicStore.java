@@ -4,7 +4,8 @@ import br.edu.ifpb.padroes.customer.Customer;
 import br.edu.ifpb.padroes.customer.CustomerType;
 import br.edu.ifpb.padroes.music.AgeRestriction;
 import br.edu.ifpb.padroes.music.Album;
-import br.edu.ifpb.padroes.music.MediaType;
+import br.edu.ifpb.padroes.store.notification.NotificationInterested;
+import br.edu.ifpb.padroes.store.notification.PurchaseNotification;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -44,19 +45,15 @@ public class MusicStore {
             double discount = calculateDiscount(album, customer.getType());
             double finalPrice = album.getPrice() - discount;
 
-            System.out.println("Purchase: " + album.getFormattedName() + " by " + customer.getName());
-            System.out.println("Original price: $" + album.getPrice());
-            System.out.println("Discount: $" + discount);
-            System.out.println("Final price: $" + finalPrice);
+            PurchaseNotification purchaseNote = new PurchaseNotification(album,customer, discount, finalPrice);
+            purchaseNote.createNotification();
 
             album.decreaseStock();
             customer.addPurchase(album);
 
-            for (Customer c : customers) {
-                if (c.isInterestedIn(album.getGenre()) && !c.equals(customer)) {
-                    System.out.println("Notifying " + c.getName() + " about popular " + album.getGenre() + " purchase");
-                }
-            }
+            NotificationInterested notifyInterested = new NotificationInterested(customers, album, customer);
+            notifyInterested.notificationAllInterestedCustomers();
+
         } else {
             System.out.println("Out of stock!");
         }
